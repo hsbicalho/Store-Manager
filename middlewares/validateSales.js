@@ -7,7 +7,6 @@ function validateProduct(req, res, next) {
 function validateQuantity(req, res, next) {
   const products = req.body;
   const quantityExist = products.every((product) => product.quantity || product.quantity === 0);
-  console.log(quantityExist);
   if (!quantityExist) return res.status(400).json({ message: '"quantity" is required' });
   const lowQuantity = products.some((product) => product.quantity < 1 || product.quantity === 0);
   if (lowQuantity) {

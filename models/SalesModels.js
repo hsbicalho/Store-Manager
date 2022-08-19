@@ -1,4 +1,3 @@
-const { get } = require('../routes/productsRoutes');
 const connection = require('./connection');
 
 const postSales = async () => {
@@ -7,7 +6,16 @@ const postSales = async () => {
   return { id: insertId };
 };
 
-const getProductsById = async (id) => {
+const getAllSales = async () => {
+  const query = `SELECT sale_id AS saleId, date, product_id AS productId, quantity
+    FROM StoreManager.sales_products as sp
+    JOIN StoreManager.sales as s
+    ON sp.sale_id = s.id`;
+  const [result] = await connection.query(query);
+  return result;
+};
+
+const getSalesById = async (id) => {
   const query = `SELECT date, product_id AS productId, quantity
     FROM StoreManager.sales_products as sp
     JOIN StoreManager.sales as s
@@ -26,4 +34,4 @@ const postSalesProducts = async (saleProduct) => {
   await connection.query(query, [saleId, productId, quantity]);
   return { productId, quantity };
 };
-module.exports = { postSales, postSalesProducts, getProductsById };
+module.exports = { postSales, postSalesProducts, getAllSales, getSalesById };
