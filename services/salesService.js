@@ -22,8 +22,22 @@ const getSalesById = async (id) => {
   return sale;
 };
 
-const deleteSale = async (id) => {
-  await salesModel.deleteSale(id);
+const deleteSale = async (saleId) => {
+  await salesModel.deleteSale(saleId);
 };
-
-module.exports = { postSales, getAllSales, getSalesById, deleteSale };
+const updateSale = async (saleId, itemsUpdated) => {
+  const saleExist = await salesModel.getSalesById(saleId);
+  if (!saleExist) return null;
+  await Promise.all(itemsUpdated.map(({ productId }) => getById(productId)));
+  Promise.all(itemsUpdated.map(async ({ quantity, productId }) => {
+    await salesModel.updateSale(saleId, quantity, productId);
+  }));
+  return { data: { saleId, itemsUpdated } };
+};
+module.exports = {
+  postSales,
+  getAllSales,
+  getSalesById,
+  deleteSale,
+  updateSale,
+};

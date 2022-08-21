@@ -39,4 +39,27 @@ const deleteSale = async (id) => {
   await connection.query('DELETE FROM StoreManager.sales WHERE id = ?', [id]);
 };
 
-module.exports = { postSales, postSalesProducts, getAllSales, getSalesById, deleteSale };
+const updateSale = async (idSale, quantity, productId) => {
+  const query = `
+    UPDATE StoreManager.sales_products AS sp
+    JOIN StoreManager.sales AS s
+    ON sp.sale_id = s.id
+    SET quantity = ?
+    WHERE s.id = ? AND product_id = ?;
+  `;
+  const [{ affectedRows }] = await connection.query(query, [
+    quantity,
+    idSale,
+    productId,
+  ]);
+  return { affectedRows };
+};
+
+module.exports = {
+  postSales,
+  postSalesProducts,
+  getAllSales,
+  getSalesById,
+  deleteSale,
+  updateSale,
+};

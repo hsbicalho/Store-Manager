@@ -4,6 +4,7 @@ function validateProduct(req, res, next) {
   if (result) return res.status(400).json({ message: '"productId" is required' });
   next();
 }
+
 function validateQuantity(req, res, next) {
   const products = req.body;
   const quantityExist = products.every((product) => product.quantity || product.quantity === 0);
