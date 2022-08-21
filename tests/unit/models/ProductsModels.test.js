@@ -11,7 +11,6 @@ describe("Test ProductModel", () => {
         const execute = [[]];
         sinon.stub(connection, "query").resolves(execute);
       });
-
       after(async () => connection.query.restore());
 
       it("null", async () => {
