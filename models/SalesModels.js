@@ -34,4 +34,9 @@ const postSalesProducts = async (saleProduct) => {
   await connection.query(query, [saleId, productId, quantity]);
   return { productId, quantity };
 };
-module.exports = { postSales, postSalesProducts, getAllSales, getSalesById };
+
+const deleteSale = async (id) => {
+  await connection.query('DELETE FROM StoreManager.sales WHERE id = ?', [id]);
+};
+
+module.exports = { postSales, postSalesProducts, getAllSales, getSalesById, deleteSale };

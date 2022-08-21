@@ -17,20 +17,13 @@ const getAllSales = async () => {
 };
 
 const getSalesById = async (id) => {
-  const sale = salesModel.getSalesById(id);
+  const sale = await salesModel.getSalesById(id);
+  if (!sale) throw new Error();
   return sale;
 };
 
-/* const postSales = async (saleData) => {
-  const [result] = await Promise.all(saleData.map(({ productId }) =>
-    getProducts.getById(productId)));
-  if (result.some((array) => array.length === 0)) {
- const { id } = await salesModel.postSales();
-    const sales = await Promise.all(saleData.map(({ productId, quantity }) =>
-    salesModel.postSalesProducts({ saleId: id, productId, quantity })));
-  return { id, itemsSold: sales };
-  }
-  throw new Error();
-}; */
+const deleteSale = async (id) => {
+  await salesModel.deleteSale(id);
+};
 
-module.exports = { postSales, getAllSales, getSalesById };
+module.exports = { postSales, getAllSales, getSalesById, deleteSale };
