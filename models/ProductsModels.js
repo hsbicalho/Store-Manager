@@ -19,4 +19,9 @@ const postProduct = async (name) => {
     .query('INSERT INTO StoreManager.products (name) VALUES (?)', [name]);
   return { id: result.insertId, name };
 };
-module.exports = { getAll, getById, postProduct };
+const updateProduct = async (name, id) => {
+  await connection
+    .query('UPDATE StoreManager.products SET name = ? WHERE id = ?', [name, id]);
+  return { id, name };
+};
+module.exports = { getAll, getById, postProduct, updateProduct };

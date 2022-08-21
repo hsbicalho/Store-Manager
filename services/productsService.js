@@ -15,4 +15,8 @@ const postProduct = async (name) => {
   if (product.length === 0) throw new Error();
   return product;
 };
-module.exports = { getAll, getById, postProduct };
+const updateProduct = async (name, id) => {
+  const updatedProduct = await ProductsModel.updateProduct(name, id);
+  return updatedProduct;
+};
+module.exports = { getAll, getById, postProduct, updateProduct };

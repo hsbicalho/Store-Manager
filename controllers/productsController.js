@@ -21,4 +21,16 @@ const postProduct = async (req, res) => {
   return res.status(201).json(product);
 };
 
-module.exports = { getAll, getById, postProduct };
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    await ProductsService.getById(id);
+    const updatedProduct = await ProductsService.updateProduct(name, id);
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+};
+
+module.exports = { getAll, getById, postProduct, updateProduct };
