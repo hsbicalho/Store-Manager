@@ -11,7 +11,7 @@ const getAll = async () => {
 const getById = async (id) => {
   const [result] = await connection
     .query('SELECT * FROM StoreManager.products WHERE id = ?', [id]);
-  if (!result) return null;
+  if (result.length === 0) return null;
   return result;
 };
 const postProduct = async (name) => {

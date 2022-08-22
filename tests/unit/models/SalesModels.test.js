@@ -1,4 +1,89 @@
-const sinon = require("sinon");
+const sinon = require('sinon');
+const { expect } = require('chai');
+const connection = require('../../../models/connection');
+const SalesModel = require('../../../models/SalesModels');
+
+describe('SALES - Testes de vendas: getAllSales e getSalesById', () => {
+  const getAllExemple = [
+	{
+		"saleId": 2,
+		"date": "2022-08-12T19:14:18.000Z",
+		"productId": 3,
+		"quantity": 15
+	}
+  ]
+  const getByIdExemple = [
+	{
+		"date": "2022-08-12T19:14:18.000Z",
+		"productId": 3,
+		"quantity": 15
+	}
+]
+  beforeEach(sinon.restore);
+
+  describe('testa getAll', () => {
+    it('quando retorna null', async () => {
+      sinon.stub(connection, 'query').resolves([]);
+      const response = await SalesModel.getAllSales();
+      expect(response).to.equal(undefined);
+    });
+
+    it('quando retorna a lista de vendas com sucesso', async () => {
+      sinon.stub(connection, 'query').resolves([getAllExemple]);
+      const response = await SalesModel.getAllSales();
+      expect(response).not.to.be.empty;
+      expect(response).to.equal(getAllExemple);
+    });
+  });
+
+  describe('testa getById', () => {
+    it('quando não existe uma venda com o ID informado', async () => {
+      sinon.stub(connection, 'query').resolves([[]]);
+      const response = await SalesModel.getSalesById(999);
+      expect(response).to.equal(null);
+    });
+
+    it('quando existe uma venda com o ID informado', async () => {
+      sinon.stub(SalesModel, 'getSalesById').resolves(getByIdExemple);
+      const response = await SalesModel.getSalesById(1);
+      console.log('response ---->', response)
+      expect(response).not.to.be.empty;
+      expect(response).to.equal(getByIdExemple);
+    });
+  });
+});
+
+describe('Testa método create de Model', () => {
+  beforeEach(sinon.restore);
+  it('quando a venda é inserida com sucesso', async () => {
+    sinon.stub(connection, 'query').resolves({ productId: 3, quantity: 15 });
+    const saleProduct = { saleId: 1, productId: 3, quantity: 15 };
+    const createdProduct = await SalesModel.postSalesProducts(saleProduct);
+    expect(createdProduct).to.be.an('object');
+    expect(createdProduct).to.include.keys('productId', 'quantity');
+  });
+
+  it('testa método createSale de salesModel', async () => {
+    sinon.stub(connection, 'query').resolves([{ id: 1 }]);
+    const createSale = await SalesModel.postSales();
+    expect(createSale).not.to.be.empty;
+    expect(createSale).to.include.keys('id');
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* const sinon = require("sinon");
 const { expect } = require("chai");
 
 const connection = require("../../../models/connection");
@@ -180,3 +265,5 @@ describe("Tests SalesModel", () => {
   });
 
 });
+
+ */
